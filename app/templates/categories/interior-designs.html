@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+<!-- MAIN CONTENT -->
+<main class="container">
+  <h1 class="page-title">Interior Designs</h1>
+  <div class="category-title">All Interior Design Materials</div>
+
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- QUICK VIEW MODAL -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog">
+  <div class="modal-box">
+
+    <button id="closeModal" class="modal-close" aria-label="Close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="product image">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc" class="modal-desc"></p>
+
+      <div id="modalTags" class="tag-container"></div>
+
+      <h3 class="modal-price">
+        ₹<span id="modalPrice"></span>
+      </h3>
+
+      <label for="modalQty">Qty</label>
+      <input type="number" id="modalQty" value="1" min="1" class="qty-input">
+
+      <div class="modal-buttons">
+        <button class="add-btn" id="modalAddToCart">Add to cart</button>
+        <a href="#" class="order-btn">Go to order</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ------------------------------------
+   INTERIOR DESIGNS PRODUCTS
+------------------------------------ */
+const productsArray = [
+  {
+    id: "int-pooja",
+    name: "Pooja Room Design",
+    price: 350,
+    tags: ["Lighting","Decorative","Ambient","Modern"],
+    img: "{% static 'images/interior/Pooja Room Interior.png' %}",
+    desc: "Beautiful pooja room interior design enhancing peace and ambience."
+  },
+  {
+    id: "int-floor",
+    name: "Flooring Design",
+    price: 18500,
+    tags: ["Premium","Elegant","Custom"],
+    img: "{% static 'images/interior/Flooring Designs.png' %}",
+    desc: "Premium flooring interior solution with elegant finishing."
+  },
+  {
+    id: "int-kitchen",
+    name: "Modular Kitchen Set",
+    price: 45000,
+    tags: ["Kitchen","Modular","Storage"],
+    img: "{% static 'images/interior/Kitchen Interior.png' %}",
+    desc: "Modern modular kitchen with granite counter and smart storage."
+  },
+  {
+    id: "int-tvunit",
+    name: "TV Unit Wall Panel",
+    price: 9500,
+    tags: ["Living Room","Decor","LED"],
+    img: "{% static 'images/interior/tvunitwall.png' %}",
+    desc: "Wall-mounted TV unit with storage and LED lighting."
+  },
+  {
+    id: "int-ceiling",
+    name: "False Ceiling (Gypsum)",
+    price: 1200,
+    tags: ["Ceiling","Lighting","Modern"],
+    img: "{% static 'images/interior/False Ceiling Designs.png' %}",
+    desc: "Gypsum false ceiling with lighting – price per sq.ft."
+  },
+  {
+    id: "int-wallpaper",
+    name: "Living Room Wallpaper",
+    price: 1400,
+    tags: ["Decor","Textured","Premium"],
+    img: "{% static 'images/interior/Living Room Interior.png' %}",
+    desc: "Premium wallpaper designs for living rooms."
+  },
+  {
+    id: "int-curtain",
+    name: "Lighting Design Curtains",
+    price: 2200,
+    tags: ["Fabric","Elegant","Modern"],
+    img: "{% static 'images/interior/lighting.png' %}",
+    desc: "Elegant premium curtains with lighting friendly fabric."
+  },
+  {
+    id: "int-kids",
+    name: "Kids Room Panel",
+    price: 950,
+    tags: ["Decorative","Stylish","Interior"],
+    img: "{% static 'images/interior/Kids Room Interior.png' %}",
+    desc: "Decorative wall panels specially designed for kids rooms."
+  },
+  {
+    id: "int-wardrobe",
+    name: "Wardrobe Design PVC Panel",
+    price: 650,
+    tags: ["PVC","Waterproof","Modern"],
+    img: "{% static 'images/interior/Wardrobe Design .png' %}",
+    desc: "PVC wardrobe panels – waterproof and durable."
+  },
+  {
+    id: "int-sofa",
+    name: "3-Seater Sofa",
+    price: 18500,
+    tags: ["Comfort","Premium","Living Room"],
+    img: "{% static 'images/interior/threesettersofa.png' %}",
+    desc: "Comfortable premium sofa for modern living rooms."
+  },
+  {
+    id: "int-bed",
+    name: "Queen Size Bed",
+    price: 23000,
+    tags: ["Bedroom","Wooden","Storage"],
+    img: "{% static 'images/interior/Queen Size Bed.png' %}",
+    desc: "Premium queen-size bed with storage drawers."
+  },
+  {
+    id: "int-study",
+    name: "Study Table",
+    price: 4200,
+    tags: ["Study","Compact","Durable"],
+    img: "{% static 'images/interior/studytable.png' %}",
+    desc: "Compact study/work table suitable for home or office."
+  }
+];
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+
+{% endblock %}

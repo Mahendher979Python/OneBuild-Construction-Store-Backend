@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+/* ---------------- GLOBAL FORM STYLE ---------------- */
+.reg-container {
+    max-width: 850px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 5px 22px rgba(0,0,0,0.10);
+    font-family: "Inter", sans-serif;
+}
+
+.reg-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.reg-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.reg-grid label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #444;
+}
+
+.reg-grid input,
+.reg-grid select,
+.reg-grid textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.reg-grid input:focus,
+.reg-grid select:focus,
+.reg-grid textarea:focus {
+    border-color: #4f46e5;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(79,70,229,0.3);
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+.submit-btn {
+    margin-top: 25px;
+    padding: 12px 20px;
+    width: 180px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.submit-btn:hover {
+    opacity: 0.9;
+}
+
+.error-msg {
+    color: red;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+@media(max-width: 700px) {
+    .reg-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<div class="reg-container">
+    <h2 class="reg-title">Seller Registration</h2>
+
+    <form id="sellerForm" method="POST">
+        {% csrf_token %}
+
+        <div class="reg-grid">
+
+            <div>
+                <label>Surname *</label>
+                <input name="surname" id="surname">
+                <div class="error-msg" id="err-surname"></div>
+            </div>
+
+            <div>
+                <label>First Name *</label>
+                <input name="firstName" id="firstName">
+                <div class="error-msg" id="err-firstName"></div>
+            </div>
+
+            <div>
+                <label>Email *</label>
+                <input name="gmail" id="gmail" type="email">
+                <div class="error-msg" id="err-gmail"></div>
+            </div>
+
+            <div>
+                <label>Business Category *</label>
+                <select name="nativeSelect" id="nativeSelect">
+                    <option value="">Choose</option>
+                    <option>Aggregates</option>
+                    <option>Bricks & Blocks</option>
+                    <option>Cement</option>
+                    <option>Paints</option>
+                    <option>Windows & Doors</option>
+                </select>
+                <div class="error-msg" id="err-nativeSelect"></div>
+            </div>
+
+            <div>
+                <label>City *</label>
+                <input name="city" id="city">
+                <div class="error-msg" id="err-city"></div>
+            </div>
+
+            <div>
+                <label>Village</label>
+                <input name="village">
+            </div>
+
+            <div>
+                <label>Mandal</label>
+                <input name="mandal">
+            </div>
+
+            <div>
+                <label>Zipcode *</label>
+                <input name="zipcode" id="zipcode" maxlength="6">
+                <div class="error-msg" id="err-zipcode"></div>
+            </div>
+
+            <div>
+                <label>Aadhaar *</label>
+                <input name="aadhaar" id="aadhaar" maxlength="12">
+                <div class="error-msg" id="err-aadhaar"></div>
+            </div>
+
+            <div>
+                <label>Phone *</label>
+                <input name="phone" id="phone" maxlength="10">
+                <div class="error-msg" id="err-phone"></div>
+            </div>
+
+             <div class="full">
+                <label>Description *</label>
+                <textarea name="description" id="description"></textarea>
+                <div class="error-msg" id="err-description"></div>
+            </div>
+
+        </div>
+
+        <div style="text-align:center;">
+            <button class="submit-btn" type="submit">Submit</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+document.getElementById("sellerForm").addEventListener("submit", function(e) {
+    let ok = true;
+
+    function error(id, msg){
+        document.getElementById("err-" + id).innerText = msg;
+        ok = false;
+    }
+
+    document.querySelectorAll(".error-msg").forEach(e => e.innerText = "");
+
+    let surname = document.getElementById("surname").value.trim();
+    let firstName = document.getElementById("firstName").value.trim();
+    let gmail = document.getElementById("gmail").value.trim();
+    let nativeSelect = document.getElementById("nativeSelect").value;
+    let city = document.getElementById("city").value.trim();
+    let zipcode = document.getElementById("zipcode").value.trim();
+    let aadhaar = document.getElementById("aadhaar").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let address = document.getElementById("description").value.trim();
+
+    if(!surname) error("surname", "Required");
+    if(!firstName) error("firstName", "Required");
+
+    if(!gmail) error("gmail", "Required");
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(gmail)) error("gmail", "Invalid email");
+
+    if(!nativeSelect) error("nativeSelect", "Please choose one");
+    if(!city) error("city", "Required");
+
+    if(!/^\d{6}$/.test(zipcode)) error("zipcode", "Invalid 6-digit PIN");
+    if(!/^\d{12}$/.test(aadhaar)) error("aadhaar", "Invalid Aadhaar");
+
+    if(!/^\d{10}$/.test(phone)) error("phone", "Invalid mobile number");
+    if(!address) error("description", "Required");
+
+    if(!ok) e.preventDefault();
+});
+</script>
+
+{% endblock %}

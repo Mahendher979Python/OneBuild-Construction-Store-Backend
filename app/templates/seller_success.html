@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+/* -------- SUCCESS PAGE STYLING -------- */
+.success-wrapper {
+    max-width: 600px;
+    margin: 60px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+
+    animation: fadeIn 0.7s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(25px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.success-wrapper img {
+    width: 120px;
+    margin-bottom: 20px;
+    animation: bounceIn 1s ease-out;
+}
+
+@keyframes bounceIn {
+    0%   { transform: scale(0.3); opacity: 0; }
+    60%  { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.success-wrapper h2 {
+    color: #10b981;
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.success-wrapper p {
+    font-size: 16px;
+    color: #444;
+    margin-top: 8px;
+}
+
+.success-wrapper .btn-box {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.success-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    text-decoration: none;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.success-btn:hover {
+    background: #382ae1;
+}
+
+.secondary-btn {
+    background: #e5e7eb;
+    color: #111;
+}
+
+.secondary-btn:hover {
+    background: #d4d4d4;
+}
+
+/* -------- CONFETTI CANVAS -------- */
+#confettiCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+</style>
+
+<!-- Confetti Canvas -->
+<canvas id="confettiCanvas"></canvas>
+
+<div class="success-wrapper">
+
+    <img src="{% static 'images/success_tick.png' %}" alt="Success">
+
+    <h2>Registration Successful!</h2>
+    <p>Your business has been successfully registered with <strong>OneBuild</strong>.</p>
+    <p>You will appear in our <strong>Contractor & Builder</strong> listing shortly.</p>
+
+    <div class="btn-box">
+        <a href="{% url 'contractor-list' %}" class="success-btn">View Contractors</a>
+        <a href="{% url 'index' %}" class="success-btn secondary-btn">Go to Home</a>
+    </div>
+
+</div>
+
+<script>
+/* -------- CONFETTI EFFECT -------- */
+const canvas = document.getElementById('confettiCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confetti = [];
+
+function randomColor() {
+    const colors = ['#10b981','#4f46e5','#facc15','#ef4444','#3b82f6'];
+    return colors[Math.floor(Math.random()*colors.length)];
+}
+
+function createConfetti() {
+    for (let i = 0; i < 120; i++) {
+        confetti.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            size: Math.random() * 6 + 3,
+            speed: Math.random() * 3 + 2,
+            color: randomColor()
+        });
+    }
+}
+
+function drawConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    confetti.forEach((c, i) => {
+        ctx.fillStyle = c.color;
+        ctx.fillRect(c.x, c.y, c.size, c.size);
+
+        c.y += c.speed;
+
+        if (c.y > canvas.height) {
+            confetti[i].y = -10;
+        }
+    });
+
+    requestAnimationFrame(drawConfetti);
+}
+
+createConfetti();
+drawConfetti();
+
+/* OPTIONAL: AUTO REDIRECT AFTER 4 SECONDS */
+// setTimeout(() => { window.location.href = "{% url 'index' %}"; }, 4000);
+</script>
+
+{% endblock %}

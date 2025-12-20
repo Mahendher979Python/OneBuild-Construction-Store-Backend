@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+<!-- MAIN CONTENT -->
+<main class="container">
+  <h1 class="page-title">Glass & Glazing</h1>
+  <div class="category-title">Glass Products & Glazing Solutions</div>
+
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- QUICK VIEW MODAL -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog">
+  <div class="modal-box">
+
+    <button id="closeModal" class="modal-close" aria-label="Close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="product image">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc" class="modal-desc"></p>
+
+      <div id="modalTags" class="tag-container"></div>
+
+      <h3 class="modal-price">
+        ₹<span id="modalPrice"></span> / sq.ft
+      </h3>
+
+      <label for="modalQty">Qty</label>
+      <input type="number" id="modalQty" value="1" min="1" class="qty-input">
+
+      <div class="modal-buttons">
+        <button class="add-btn" id="modalAddToCart">Add to cart</button>
+        <a href="#" class="order-btn">Go to order</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ---------------------------
+   GLASS & GLAZING PRODUCTS
+--------------------------- */
+const productsArray = [
+  {
+    id: "glass-clear-6mm",
+    name: "Clear Float Glass 6mm",
+    price: 1200,
+    tags: ["Clear Finish","Float Glass","Versatile","High Quality","Bulk Booking"],
+    img: "{% static 'images/glass/Clear Float Glass.png' %}",
+    desc: "Standard clear float glass for windows and partitions."
+  },
+  {
+    id: "glass-clear-8mm",
+    name: "Clear Float Glass 8mm",
+    price: 1600,
+    tags: ["Thick Glass","Strong","Doors & Windows","Bulk Order"],
+    img: "{% static 'images/glass/Clear Float Glass 8mm.png' %}",
+    desc: "8mm thick clear float glass for heavy glazing."
+  },
+  {
+    id: "glass-tempered-10mm",
+    name: "Tempered Glass 10mm",
+    price: 2800,
+    tags: ["Safety Glass","High Strength","Premium"],
+    img: "{% static 'images/glass/Tempered Glass.png' %}",
+    desc: "Tempered safety glass with high impact resistance."
+  },
+  {
+    id: "glass-laminated-8mm",
+    name: "Laminated Glass 8mm",
+    price: 3200,
+    tags: ["Sound Proof","Security","Laminated"],
+    img: "{% static 'images/glass/Laminated Glass.png' %}",
+    desc: "Laminated glass with sound reduction properties."
+  },
+  {
+    id: "glass-frosted",
+    name: "Frosted Glass Panel",
+    price: 1500,
+    tags: ["Privacy","Decorative","Bathroom Use"],
+    img: "{% static 'images/glass/Frosted Glass Pane.png' %}",
+    desc: "Frosted glass for privacy and decorative applications."
+  },
+  {
+    id: "glass-reflective",
+    name: "Reflective Glass",
+    price: 2400,
+    tags: ["Solar Control","Facade","Energy Saving"],
+    img: "{% static 'images/glass/Reflective Glass.png' %}",
+    desc: "Reflective glass reduces heat gain and glare."
+  },
+  {
+    id: "glass-low-e",
+    name: "Low-E Glass",
+    price: 3600,
+    tags: ["Energy Saver","Thermal Control","Premium"],
+    img: "{% static 'images/glass/Low-E Glass.png' %}",
+    desc: "Low-emissivity glass for thermal efficiency."
+  },
+  {
+    id: "glass-insulated",
+    name: "Double Glazed IGU",
+    price: 5200,
+    tags: ["Insulated","Acoustic","Thermal"],
+    img: "{% static 'images/glass/Double Glazed IGU (Insulated.png' %}",
+    desc: "Double glazed insulated glass unit."
+  },
+  {
+    id: "glass-patterned",
+    name: "Patterned Glass",
+    price: 1700,
+    tags: ["Decorative","Textured","Light Diffusion"],
+    img: "{% static 'images/glass/Patterned Glass.png' %}",
+    desc: "Patterned glass for decorative doors and windows."
+  },
+  {
+    id: "glass-mirror",
+    name: "Polished Mirror",
+    price: 1100,
+    tags: ["Mirror","Interior","Bathroom"],
+    img: "{% static 'images/glass/Polished Mirror.png' %}",
+    desc: "High-quality polished mirror for interiors."
+  }
+];
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+
+{% endblock %}

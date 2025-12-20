@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+  <h1 class="page-title">Paints</h1>
+  <div class="category-title">Premium & Budget Paints</div>
+
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- QUICK VIEW MODAL -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog">
+  <div class="modal-box">
+
+    <button id="closeModal" class="modal-close" aria-label="Close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="product image">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc" class="modal-desc"></p>
+
+      <div id="modalTags" class="tag-container"></div>
+
+      <h3 class="modal-price">
+        ₹<span id="modalPrice"></span>
+      </h3>
+
+      <label for="modalQty">Qty</label>
+      <input type="number" id="modalQty" value="1" min="1" class="qty-input">
+
+      <div class="modal-buttons">
+        <button class="add-btn" id="modalAddToCart">Add to cart</button>
+        <a href="#" class="order-btn">Go to order</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ---------------------------
+   PAINTS PRODUCT DATA
+--------------------------- */
+const productsArray = [
+  {
+    id: "paint-asian",
+    name: "Asian Paints Emulsion",
+    price: 1250,
+    tags: ["Emulsion","Premium","Interior","Smooth Finish","Long Lasting"],
+    img: "{% static 'images/paints/asianpaints.jpg' %}",
+    desc: "Asian Paints emulsion for smooth and durable interior finish."
+  },
+  {
+    id: "paint-berger",
+    name: "Berger WeatherCoat",
+    price: 1350,
+    tags: ["Exterior","Weatherproof","Durable","Premium"],
+    img: "{% static 'images/paints/BergerPaints.png' %}",
+    desc: "Weather-resistant exterior paint for long-lasting protection."
+  },
+  {
+    id: "paint-nerolac",
+    name: "Nerolac Excel Mica Marble",
+    price: 1500,
+    tags: ["Exterior","Water Resistant","High Strength"],
+    img: "{% static 'images/paints/NerolacPaints.png' %}",
+    desc: "High strength exterior paint with elegant mica marble finish."
+  },
+  {
+    id: "paint-dulux",
+    name: "Dulux Velvet Touch",
+    price: 1650,
+    tags: ["Luxury","Interior","Smooth Finish"],
+    img: "{% static 'images/paints/Duluxpaint.png' %}",
+    desc: "Luxury interior paint with ultra-smooth velvet finish."
+  },
+  {
+    id: "paint-indigo",
+    name: "Indigo Acrylic Paint",
+    price: 950,
+    tags: ["Acrylic","Budget","Interior"],
+    img: "{% static 'images/paints/Indigopaint.png' %}",
+    desc: "Affordable acrylic interior paint with vibrant finish."
+  },
+  {
+    id: "paint-shalimar",
+    name: "Shalimar Superlac",
+    price: 850,
+    tags: ["Interior","Economical","Smooth"],
+    img: "{% static 'images/paints/Shalimarpaint.png' %}",
+    desc: "Economical interior paint with good coverage."
+  },
+  {
+    id: "paint-snowcem",
+    name: "Snowcem Plus",
+    price: 780,
+    tags: ["Cement Paint","Exterior","Weatherproof"],
+    img: "{% static 'images/paints/Snowcempaint.png' %}",
+    desc: "Classic cement paint suitable for exterior walls."
+  },
+  {
+    id: "paint-jenson",
+    name: "Jenson & Nicholson Ultra",
+    price: 1050,
+    tags: ["Washable","Interior","Premium"],
+    img: "{% static 'images/paints/JensonNicholsonpaint.png' %}",
+    desc: "Washable premium interior paint."
+  },
+  {
+    id: "paint-tractor",
+    name: "Asian Paints Tractor Emulsion",
+    price: 650,
+    tags: ["Budget","Interior","Economy"],
+    img: "{% static 'images/paints/asianpaints.jpg' %}",
+    desc: "Budget-friendly emulsion paint for large areas."
+  },
+  {
+    id: "paint-royale",
+    name: "JSW Paints Royale Luxury",
+    price: 2200,
+    tags: ["Luxury","Anti-bacterial","Premium"],
+    img: "{% static 'images/paints/JSWPaints.png' %}",
+    desc: "Luxury interior paint with anti-bacterial properties."
+  }
+];
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+
+{% endblock %}

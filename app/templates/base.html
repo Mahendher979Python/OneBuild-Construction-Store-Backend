@@ -1,0 +1,252 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Page Title -->
+  <title>{% block title %}OneBuild Construction Store{% endblock %}</title>
+
+  <!-- SEO Meta -->
+  <meta name="description" content="OneBuild is your one-stop shop for quality building materials, tools, and construction products.">
+  <meta name="keywords" content="construction materials, cement, steel, paint">
+  <meta name="author" content="B. Mahendher">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="OneBuild Construction Store">
+  <meta property="og:description" content="Shop building materials with OneBuild">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{% static 'images/homepages/favicon.png' %}">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+<!-- 🔹 TOP BLACK BAR -->
+<div class="top-bar">
+  <div class="left">
+    <a href="tel:+916305165869"><i class="fa-solid fa-phone"></i></a>
+    <a href="mailto:mahibanavath054@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+  </div>
+  <div class="right">
+    <a href="#"><i class="fa-solid fa-mobile-screen-button"></i> Download App</a>
+    <a href="{% url 'seller-register' %}">Seller Registration</a>
+  </div>
+</div>
+
+<!-- 🔹 NAVBAR -->
+<nav class="navbar">
+
+  <div class="logo">
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/base/onebuild.png' %}" class="logo-img" alt="OneBuild Logo">
+    </a>
+  </div>
+
+  <div class="nav-center">
+    <a href="#">Career</a>
+    <a href="#">Gallery</a>
+    <a href="#">Blogs</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="#">Login</a>
+  </div>
+
+ {% load static %}
+
+
+  <div class="right-buttons">
+
+   <button class="cart-btn"
+        onclick="location.href='{% url 'cart' %}'">
+       <img src="{% static 'images/base/onebuildcart.png' %}" alt="Cart"
+         class="cart-icon">
+        <span id="cart-badge">0</span>
+    </button>
+  </div>
+
+
+  <div class="menu-toggle">
+    <i class="fa-solid fa-bars"></i>
+  </div>
+</nav>
+
+<!-- 🔹 MOBILE MENU -->
+<div class="mobile-menu">
+  <a href="#">Career</a>
+  <a href="#">Services</a>
+  <a href="#">Blogs</a>
+  <a href="#">About</a>
+  <a href="#">Login</a>
+</div>
+
+<!-- 🔹 PAGE CONTENT -->
+{% block content %}{% endblock %}
+
+<!-- 🔹 Footer Section -->
+<footer class="footer">
+  <div class="footer-top">
+
+    <div class="footer-column">
+      <h3><span style="color: rgb(5, 174, 204);">Construction & Services</span></h3>
+      <ul>
+        <li><a href="#">House Construction Cost Calculator</a></li>
+        <li><a href="#">House Builder Contractor</a></li>
+        <li><a href="#">Labour Register</a></li>
+        <li><a href="#">Labour Form Document</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3><span style="color:rgb(5, 174, 204);">Customer & Support</span></h3>
+      <ul>
+        <li><a href="#">Contact 24/7</a></li>
+        <li><a href="#">Feedback</a></li>
+        <li><a href="#">Frequently Asked Questions</a></li>
+        <li><a href="#">Write Reviews ⭐</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3><span style="color:rgb(5, 174, 204);">Help Desk</span></h3>
+      <ul>
+        <li><a href="#">Shipping & Delivery</a></li>
+        <li><a href="#">Refund & Returns</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms & Conditions</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column map-column">
+      <h3 style="color: rgb(5, 174, 204);">Download The App Now</h3>
+      <div class="app-links">
+        <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"></a>
+        <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"></a>
+      </div>
+    </div>
+
+  </div>
+  <hr class="footer-divider">
+</footer>
+
+<!-- 🔹 Google Maps Location Card -->
+<section class="location-card" aria-label="Location card">
+  <div class="location-info">
+    <h1>Gangapur, Telangana</h1>
+    <p class="lead">Local service hub — verified vendors and quick support.</p>
+
+    <div class="location-row">
+      <div class="plus-code" id="plusCode">5PQ7+GC2</div>
+
+      <div class="actions">
+        <a class="btn"
+           href="https://www.google.com/maps/place/5PQ7%2BGC2,+Gangapur,+Telangana/"
+           target="_blank">
+          View on Map
+        </a>
+        <button class="ghost">Get Directions</button>
+      </div>
+    </div>
+
+    <div class="meta">Open: Mon - Sat · 9:00 AM - 6:00 PM</div>
+  </div>
+
+  <div class="map-wrap">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60894.89984379056!2d78.6762936!3d19.1824871!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcd7e4f6aa9f197%3A0x1386c21fa5d19d7a!2sGangapur%2C%20Telangana!5e0!3m2!1sen!2sin!4v1733470000000"
+      width="100%"
+      height="350"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+</section>
+
+
+
+<!-- 🔹 Bottom Footer -->
+<footer class="footer">
+
+  <div class="footer-top">
+    <div class="footer-column">
+      <h3>OneBuild</h3>
+      <p>Your trusted construction materials marketplace.</p>
+      <p>Fast delivery  <p>Best brands </p> All building solutions</p>
+    </div>
+
+    <div class="footer-column">
+      <h3>ONE-BUILD Overview</h3>
+      <ul>
+        <li><a href="#">Career Opportunities</a></li>
+        <li><a href="#">Construction Gallery</a></li>
+        <li><a href="#">Blogs & Articles</a></li>
+        <li><a href="#">Shop Categories</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>My Account</h3>
+      <ul>
+        <li><a href="#">Register Account</a></li>
+        <li><a href="#">My Order</a></li>
+        <li><a href="#">Order Tracking</a></li>
+        <li><a href="#">Business Enrollment</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Contact</h3>
+      <p>Hyderabad, Telangana</p>
+      <p>+91 6305165869</p>
+      <p>onebuildindia@gmail.com</p>
+
+      <div class="social-icons">
+        <h3>Follow Us</h3>
+        <a href="#"><img src="{% static 'images/socialmedia/facebook.png' %}"></a>
+        <a href="#"><img src="{% static 'images/socialmedia/instagram.png' %}"></a>
+        <a href="#"><img src="{% static 'images/socialmedia/youtube.png' %}"></a>
+        <a href="#"><img src="{% static 'images/socialmedia/twitter.png' %}"></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ PAYMENT METHODS (NOW INSIDE FOOTER ✅) -->
+  <div class="payment-methods">
+    <h3 style="text-align: center;">Payment Methods</h3>
+    <div class="payment-icons">
+      <img src="{% static 'images/paymenticons/mastercard.png' %}">
+      <img src="{% static 'images/paymenticons/visacard.png' %}">
+      <img src="{% static 'images/paymenticons/amex.png' %}">
+      <img src="{% static 'images/paymenticons/paypal.png' %}">
+      <img src="{% static 'images/paymenticons/emi.png' %}">
+      <img src="{% static 'images/paymenticons/rupay.png' %}">
+      <img src="{% static 'images/paymenticons/cash.png' %}">
+    </div>
+  </div>
+
+  <p style="text-align:center; margin-top:20px;">
+    © 2025 One-Build Developer <span style="color:#ffee00;">BANAVATH MAHENDHER</span>
+  </p>
+
+</footer>
+
+
+{% block extra_js %}
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
+{% endblock %}
+

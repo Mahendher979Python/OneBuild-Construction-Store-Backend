@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- ================= TOP NAV LINKS ================= -->
+<div class="bottom-links">
+  <ul class="nav-links" id="navLinks">
+
+    <li>
+      <a href="{% url 'house_cost_calculator' %}">House-Build Calculator</a>
+    </li>
+
+    <li class="dropdown">
+      <a href="{% url 'house_categories' %}" class="drop-btn">House Categories</a>
+
+      <ul class="drop-menu">
+        <div class="category-col">
+          <li><a href="{% url 'category' 'aggregates' %}">Aggregates</a></li>
+          <li><a href="{% url 'category' 'bricks-blocks' %}">Bricks & Blocks</a></li>
+          <li><a href="{% url 'category' 'cement' %}">Cement</a></li>
+          <li><a href="{% url 'category' 'sand' %}">Sand</a></li>
+          <li><a href="{% url 'category' 'tmt' %}">TMT Bars</a></li>
+          <li><a href="{% url 'category' 'roofing' %}">Roofing</a></li>
+          <li><a href="{% url 'category' 'doors-windows' %}">Doors & Windows</a></li>
+          <li><a href="{% url 'category' 'plumbing' %}">Plumbing</a></li>
+          <li><a href="{% url 'category' 'electrical' %}">Electrical</a></li>
+          <li><a href="{% url 'category' 'paints' %}">Paints</a></li>
+          <li><a href="{% url 'category' 'flooring' %}">Flooring</a></li>
+          <li><a href="{% url 'category' 'interior-designs' %}">Interior Designs</a></li>
+          <li><a href="{% url 'category' 'glass-glazing' %}">Glass & Glazing</a></li>
+          <li><a href="{% url 'category' 'insulation' %}">Insulation</a></li>
+          <li><a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a></li>
+        </div>
+      </ul>
+    </li>
+
+    <li>
+      <a href="{% url 'contractor-list' %}">contractor-list</a>
+    </li>
+
+  </ul>
+</div>
+
+<!-- ================= BANNER ================= -->
+<div class="banner">
+  <div class="banner-text">
+    <h2>CHECK PRICE ON THE WEBSITE</h2>
+    <h1>BEFORE YOU BUY</h1>
+  </div>
+  <div class="banner-img">
+    <img src="{% static 'images/homepages/househand.jpg' %}">
+  </div>
+</div>
+
+<!-- ================= SHOP CATEGORIES ================= -->
+<div class="shop-categories">
+  <h2>Shop Categories</h2>
+
+  <div class="category-grid">
+
+    {% comment %} CATEGORY CARD TEMPLATE {% endcomment %}
+    <div class="category-card">
+      <a href="{% url 'category' 'aggregates' %}">
+        <img src="{% static 'images/categories/Aggregates.png' %}">
+      </a>
+      <p>Aggregates</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'bricks-blocks' %}">
+        <img src="{% static 'images/categories/Bricks&Blocks.png' %}">
+      </a>
+      <p>Bricks & Blocks</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'cement' %}">
+        <img src="{% static 'images/categories/cement.png' %}">
+      </a>
+      <p>Cement</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'electrical' %}">
+        <img src="{% static 'images/categories/Electrics.png' %}">
+      </a>
+      <p>Electrical</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'flooring' %}">
+        <img src="{% static 'images/categories/Flooring.png' %}">
+      </a>
+      <p>Flooring</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'interior-designs' %}">
+        <img src="{% static 'images/categories/interiordesings.png' %}">
+      </a>
+      <p>Interior Designs</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'glass-glazing' %}">
+        <img src="{% static 'images/categories/Glass & Glazing.png' %}">
+      </a>
+      <p>Glass & Glazing</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'insulation' %}">
+        <img src="{% static 'images/categories/Insulation.png' %}">
+      </a>
+      <p>Insulation</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'paints' %}">
+        <img src="{% static 'images/categories/assain paints.png' %}">
+      </a>
+      <p>Paints</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'plumbing' %}">
+        <img src="{% static 'images/categories/Pumbling.jpg' %}">
+      </a>
+      <p>Plumbing</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'roofing' %}">
+        <img src="{% static 'images/categories/Roofing.png' %}">
+      </a>
+      <p>Roofing</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'sand' %}">
+        <img src="{% static 'images/categories/sand.png' %}">
+      </a>
+      <p>Sand</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'sanitaryware' %}">
+        <img src="{% static 'images/categories/Sanitaryware.png' %}">
+      </a>
+      <p>Sanitaryware</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'tmt' %}">
+        <img src="{% static 'images/categories/tmt.png' %}">
+      </a>
+      <p>TMT Bars</p>
+    </div>
+
+    <div class="category-card">
+      <a href="{% url 'category' 'doors-windows' %}">
+        <img src="{% static 'images/categories/Windows&Door.png' %}">
+      </a>
+      <p>Windows & Doors</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marquee-line">
+  <marquee scrollamount="6">
+    🏗️ Welcome to OneBuild Construction Store — Your trusted source for building materials!
+  </marquee>
+</div>
+
+<!-- ================= VIDEO SECTION ================= -->
+<section class="video-section">
+  <h2>🏠 OneBuild – Construction Videos</h2>
+
+  <div class="video-container">
+    <div class="video-box">
+      <video controls muted>
+        <source src="{% static 'videos/House_Construction_Before_and_After.mp4' %}" type="video/mp4">
+      </video>
+      <p>Before & After</p>
+    </div>
+
+    <div class="video-box">
+      <video controls>
+        <source src="{% static 'videos/House_Interior_Design_Video_Generated.mp4' %}" type="video/mp4">
+      </video>
+      <p>Interior Designs</p>
+    </div>
+
+    <div class="video-box">
+      <video controls>
+        <source src="{% static 'videos/Building_Materials_Video_Creation.mp4' %}" type="video/mp4">
+      </video>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

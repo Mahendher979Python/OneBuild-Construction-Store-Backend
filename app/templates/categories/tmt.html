@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+  </div>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+  <h1 class="page-title">TMT Steel</h1>
+  <div class="category-title">All TMT Steel Products</div>
+
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- QUICK VIEW MODAL -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog">
+  <div class="modal-box">
+
+    <button id="closeModal" class="modal-close" aria-label="Close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="product image">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc" class="modal-desc"></p>
+
+      <div id="modalTags" class="tag-container"></div>
+
+      <h3 class="modal-price">₹<span id="modalPrice"></span></h3>
+
+      <label for="modalQty">Qty</label>
+      <input type="number" id="modalQty" value="1" min="1" class="qty-input">
+
+      <div class="modal-buttons">
+        <button class="add-btn" id="modalAddToCart">Add to cart</button>
+        <a href="#" class="order-btn">Go to order</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ---------------------------
+   TMT STEEL PRODUCTS
+--------------------------- */
+const productsArray = [
+  {
+    id: "tmt-fe500",
+    name: "TMT FE-500 Grade Steel Bar (12mm)",
+    price: 680,
+    tags: ["FE-500","Construction","High Strength","Reinforcement",],
+    img: "{% static 'images/tmtbars/TMTFe500steelbars.png' %}",
+    desc: "High-strength FE-500 TMT bar suitable for beams, slabs, and heavy RCC works."
+  },
+  {
+    id: "tmt-fe550d",
+    name: "TMT FE-550D Grade Steel Bar (12mm)",
+    price: 720,
+    tags: ["FE-550D","Ductile","Earthquake Resistant","High Strength"],
+    img: "{% static 'images/tmtbars/TMT FE-550D Grade Steel Bar12m.png' %}",
+    desc: "Premium FE-550D steel bar with superior ductility for seismic safety."
+  },
+  {
+    id: "tmt-fe600",
+    name: "TMT FE-600 Super Grade (All Sizes)",
+    price: 760,
+    tags: ["FE-600","Super Strength","Heavy Load","Industrial"],
+    img: "{% static 'images/tmtbars/TMT FE-600 Super Grade.png' %}",
+    desc: "Ultra high-strength FE-600 TMT steel ideal for high-rise buildings."
+  },
+  {
+    id: "tmt-binding-wire ",
+    name: "Binding Wire - Diffrent Qualities (kg's)",
+    price: 95,
+    tags: ["Binding Wire","Flexible","Strong","Construction","Types of Qualityes"],
+    img: "{% static 'images/tmtbars/TMTBindingWire.png' %}",
+    desc: "Strong binding wire used for tying reinforcement bars effectively."
+  },
+  {
+    id: "tmt-stirrups",
+    name: "MS Ring Stirrups (8mm)",
+    price: 38,
+    tags: ["Stirrups","Pre-made","Reinforcement","Strong"],
+    img: "{% static 'images/tmtbars/MS Ring Stirrups (8mm).png' %}",
+    desc: "Factory-made MS stirrups ensure uniform beam-column reinforcement."
+  },
+  {
+    id: "tmt-corrugated",
+    name: "Corrugated Steel Sheet",
+    price: 1450,
+    tags: ["Steel Sheet","Roofing","Durable","Weather Resistant","Bulk Orders"],
+    img: "{% static 'images/tmtbars/Corrugated Steel Sheet.png' %}",
+    desc: "Corrugated steel sheet suitable for roofing and temporary structures."
+  }
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+
+{% endblock %}

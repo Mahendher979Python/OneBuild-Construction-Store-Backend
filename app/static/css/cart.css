@@ -1,0 +1,389 @@
+/* =========================================================
+   ONEBUILD — GLOBAL THEME & E-COMMERCE UI
+   Optimized + Cleaned + No Duplicates
+========================================================= */
+
+/* ------------------ ROOT VARIABLES ------------------ */
+:root{
+  --bg: #0a0a0b;
+  --surface: #0f1619;
+  --card-grad-from: rgba(255,255,255,0.01);
+  --card-grad-to: rgba(255,255,255,0.005);
+  --muted: #9aa8b8;
+  --text: #e9eef6;
+  --accent: #4cc2ff;
+  --accent-strong: #135fbc;
+  --chip: #102029;
+  --glass: #11151a;
+  --price: #7be0ff;
+  --danger: #ff4b5c;
+  --success: #2dd36f;
+  --shadow: rgba(2,8,12,0.6);
+
+  --container-max: 1200px;
+  --gutter: 18px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+
+  --font-sans: Inter, Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue';
+}
+
+/* ------------------ RESET ------------------ */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-sans);
+  line-height:1.4;
+  padding-bottom:40px;
+}
+
+a{ color:inherit; text-decoration:none; }
+img{ display:block; max-width:100%; }
+
+/* ------------------ CONTAINER ------------------ */
+.container{
+  max-width:var(--container-max);
+  margin:0 auto;
+  padding:20px;
+}
+
+/* ------------------ NAVIGATION ------------------ */
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.nav a{
+  color:var(--muted);
+  padding:8px 10px;
+  border-radius:8px;
+  transition:0.2s;
+}
+.nav a:hover{
+  background:rgba(255,255,255,0.07);
+  color:white;
+}
+
+/* ------------------ TITLES ------------------ */
+.page-title{
+  font-size:28px;
+  margin:24px 0 10px;
+}
+.category-title{
+  font-size:20px;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+/* ------------------ PRODUCT GRID ------------------ */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:var(--gutter);
+}
+
+/* ------------------ PRODUCT CARD ------------------ */
+.card{
+  background:linear-gradient(180deg,var(--card-grad-from),var(--card-grad-to));
+  border:1px solid rgba(255,255,255,0.03);
+  padding:16px;
+  border-radius:var(--radius-lg);
+  box-shadow:0 6px 18px var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  cursor:pointer;
+}
+
+/* Product Image Container */
+.thumb{
+  height:240px;
+  border-radius:12px;
+  background:#ffffff10;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+.thumb img{
+  height:100%;
+  width:100%;
+  object-fit:contain;
+  background:#000;
+  padding:10px;
+  border-radius:10px;
+}
+
+/* Product Info */
+.card h3{
+  margin:0;
+  font-size:16px;
+  font-weight:600;
+}
+
+.price{
+  color:var(--price);
+  font-size:17px;
+  font-weight:700;
+}
+
+/* ------------------ TAGS (CHIPS) ------------------ */
+.chips{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.chip{
+  background:var(--chip);
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  color:var(--muted);
+  border:1px solid rgba(255,255,255,0.02);
+}
+
+/* ------------------ BUTTONS ------------------ */
+.btn{
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.05);
+  background:#0c1117;
+  color:var(--muted);
+  cursor:pointer;
+  transition:0.2s;
+}
+.btn:hover{
+  background:#141a22;
+}
+
+.btn.add{
+  background:var(--accent-strong);
+  border:0;
+  color:black;
+  font-weight:600;
+}
+
+/* ------------------ CART TABLE ------------------ */
+.cart-table{
+  width:100%;
+  margin-top:20px;
+  border-collapse:collapse;
+}
+.cart-table th,
+.cart-table td{
+  padding:12px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.cart-table th{
+  background:rgba(255,255,255,0.04);
+  color:var(--muted);
+}
+
+/* ------------------ CART SUMMARY ------------------ */
+.cart-summary{
+  display:flex;
+  justify-content:flex-end;
+  gap:12px;
+  align-items:center;
+  margin-top:16px;
+}
+.grand{
+  color:var(--price);
+  font-weight:700;
+  font-size:20px;
+}
+
+/* ------------------ MODAL (PRODUCT QUICK VIEW) ------------------ */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  z-index:3000;
+}
+
+.modal-box{
+  background:#0d0f14;
+  width:95%;
+  max-width:1100px;
+  display:flex;
+  gap:30px;
+  padding:20px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+.modal-close{
+  position:absolute;
+  top:15px;
+  right:20px;
+  background:#2b3038;
+  color:white;
+  border:0;
+  padding:7px 12px;
+  border-radius:10px;
+  font-size:20px;
+}
+
+.modal-left,
+.modal-right{
+  flex:1;
+}
+
+.modal-img{
+  width:100%;
+  max-height:420px;
+  object-fit:contain;
+  background:#000;
+  padding:10px;
+  border-radius:12px;
+}
+
+.modal-price{
+  font-size:22px;
+  color:var(--price);
+  font-weight:700;
+}
+
+.qty-input{
+  width:90px;
+  padding:6px;
+  border-radius:8px;
+  background:#1b1e24;
+  border:1px solid rgba(255,255,255,0.1);
+  color:white;
+}
+
+/* ------------------ PAYMENT FOOTER ------------------ */
+.payment-methods{
+  text-align:center;
+  margin-top:30px;
+}
+.payment-icons{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.payment-icons img{
+  height:34px;
+  padding:6px 10px;
+  border-radius:6px;
+  background:#997373;
+}
+
+/* ------------------ SOCIAL FOOTER FIX ------------------ */
+.social-icons{
+  display:flex;
+  gap:10px;
+}
+.social-icons img{
+  width:32px;
+  height:32px;
+}
+
+/* ------------------ RESPONSIVE ------------------ */
+@media(max-width:900px){
+  .modal-box{
+    flex-direction:column;
+  }
+  .modal-img{
+    max-height:300px;
+  }
+}
+
+@media(max-width:600px){
+  .grid{
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  }
+}
+
+
+/* ===============================
+   PAYMENT METHODS – SECOND FOOTER
+================================ */
+.payment-methods{
+  text-align:center;
+  margin-top:25px;
+}
+
+.payment-methods h3{
+  color:#faeeee;
+  font-size:18px;
+  margin-bottom:16px;
+}
+
+.payment-icons{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.payment-icons img{
+  height:34px;
+  background:#997373;
+  padding:6px 10px;
+  border-radius:6px;
+  object-fit:contain;
+  box-shadow:0 2px 6px rgba(0,0,0,0.4);
+}
+.footer{
+  position: relative;
+  overflow: visible;
+}
+
+.grid{
+  min-height: auto;
+}
+/* Hide footer content safely without breaking layout */
+.hide-footer-sections{
+  min-height: 40px;   /* 🌟 important */
+}
+
+/* Payment section full width force */
+.payment-methods{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Prevent left-floating */
+.payment-icons{
+  justify-content: center !important;
+}
+
+
+/* ===============================
+   FOLLOW US – FOOTER FIX
+=============================== */
+.social-icons{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start; /* left align like screenshot */
+  margin-top: 10px;
+}
+
+.social-icons a{
+  display: inline-flex;
+}
+
+.social-icons img{
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  background-color: transparent; /* 🔥 important */
+  border-radius: 6px;
+}

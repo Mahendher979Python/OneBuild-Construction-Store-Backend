@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+
+ <div class="nav">
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+
+<main class="container">
+  <h1 class="page-title">Aggregate</h1>
+  <div class="category-title">All Aggregate Products</div>
+
+  <!-- ✅ GRID -->
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- ✅ MODAL (hidden by CSS) -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <button id="closeModal" class="modal-close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+      <div id="modalTags"></div>
+      <h3>₹<span id="modalPrice"></span></h3>
+
+      <input id="modalQty" type="number" value="1">
+      <button id="modalAddToCart">Add to cart</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+
+
+/* -----------------------------------------
+   AGGREGATES PRODUCTS DATA (5 TAGS + 5-LINE DESC)
+------------------------------------------ */
+ const productsArray = [
+  {
+    id: "agg-river-10",
+    name: "River Gravel (10 mm)",
+    price: 2799,
+    tags: ["Bulk Booking","Natural","Drainage","Landscaping","Decorative"],
+    img: "{% static 'images/aggregates/riveraggrgates.png' %}",
+    desc: "Rounded 10 mm river gravel ideal for drainage and landscaping.\nProvides excellent water filtration and soil stability.\nDurable and long-lasting for outdoor projects.\nPerfect for decorative pathways and garden beds.\nAvailable in bulk for construction and landscaping work."
+  },
+
+  {
+    id: "agg-msand",
+    name: "Manufactured (M-sand)",
+    price: 1999,
+    tags: ["Bulk Booking","Crushed","PCC","Plastering","Block Work"],
+    img: "{% static 'images/aggregates/manufacturedsand.png' %}",
+    desc: "High-quality manufactured sand with consistent gradation.\nIdeal for plastering, concrete, and masonry work.\nReduces impurities compared to natural sand.\nEnsures smooth and durable construction finishes.\nAvailable in bulk for contractors and builders."
+  },
+
+  {
+    id: "agg-barite",
+    name: "Barite Aggregate",
+    price: 8999,
+    tags: ["Bulk Booking","Heavy","Radiation Shielding","High Density"],
+    img: "{% static 'images/aggregates/bariteaggregate.png' %}",
+    desc: "High-density barite aggregate used in special concrete.\nIdeal for radiation shielding applications.\nEnsures strong and durable high-density concrete.\nUsed in medical and industrial constructions.\nAvailable in bulk for specialized projects."
+  },
+
+  {
+    id: "agg-barite",
+    name: "Barite Aggregate",
+    price: 8999,
+    tags: ["Bulk Booking","Heavy","Radiation Shielding","High Density"],
+    img: "{% static 'images/aggregates/bariteaggregate.png' %}",
+    desc: "High-density barite aggregate used in special concrete.\n" +
+          "Ideal for radiation shielding applications.\n" +
+          "Ensures strong and durable high-density concrete.\n" +
+          "Used in medical and industrial constructions.\n" +
+          "Available in bulk for specialized projects."
+  },
+ {
+    id: "agg-pumice",
+    name: "Pumice Stone",
+    price: 3999,
+    tags: ["Bulk Booking","Lightweight","Porous","Insulation","Block Manufacturing"],
+    img: "{% static 'images/aggregates/pumicestonelightweight.png' %}",
+    desc: "Porous and lightweight pumice stone for insulation.\nIdeal for manufacturing lightweight concrete blocks.\nEnhances thermal and acoustic properties.\nDurable and easy to handle for construction work.\nAvailable in bulk for contractors and builders."
+  },
+
+ {
+    id: "agg-magnetite",
+    name: "Magnetite Aggregate",
+    price: 9499,
+    tags: ["Bulk Booking","Dense","Magnetic","High Density Concrete","Radiation Shielding"],
+    img: "{% static 'images/aggregates/magnetiteaggregate.png' %}",
+    desc: "Magnetite heavy aggregate for ultra-dense high-strength concrete.\nProvides excellent shielding for radiation-sensitive areas.\nEnsures durable and long-lasting construction.\nIdeal for industrial and scientific applications.\nAvailable in bulk for specialized concrete projects."
+  },
+
+   {
+    id: "agg-robo",
+    name: "Robo Aggregate",
+    price: 2599,
+    tags: ["Bulk Booking","Eco-friendly","Recycled","Concrete","Sustainable","Special Concrete"],
+    img: "{% static 'images/aggregates/roboaggregates.png' %}",
+    desc: "Recycled robo aggregate suitable for sustainable construction.\nReduces environmental impact and waste.\nIdeal for concrete and masonry work.\nDurable and cost-effective alternative to natural aggregates.\nAvailable in bulk for eco-conscious contractors."
+  },
+
+  {
+    id: "agg-gsb",
+    name: "GSB Aggregate",
+    price: 1299,
+    tags: ["Bulk Booking","Road Base","Compaction","Sub-base","Highway Work"],
+    img: "{% static 'images/aggregates/grt.png' %}",
+    desc: "Granular Sub-Base (GSB) used for road construction.\nProvides excellent compaction and stability.\nEnsures long-lasting sub-base and pavement durability.\nSuitable for highways, streets, and infrastructure projects.\nAvailable in bulk for contractors and civic projects."
+  }
+];
+
+/* -----------------------------------------
+   RENDER PRODUCTS
+------------------------------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+
+
+{% endblock %}

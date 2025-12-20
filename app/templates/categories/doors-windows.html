@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+  <h1 class="page-title">Doors & Windows</h1>
+  <div class="category-title">All Door & Window Products</div>
+
+  <!-- ✅ PRODUCTS GRID -->
+  <section class="grid" id="products-grid"></section>
+</main>
+
+
+<!-- ===========================
+     QUICK VIEW MODAL
+=========================== -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <button id="closeModal" class="modal-close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+
+      <div id="modalTags" class="tags"></div>
+
+      <h3>₹<span id="modalPrice"></span></h3>
+
+      <input id="modalQty" type="number" min="1" value="1">
+      <button id="modalAddToCart">Add to cart</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ---------------------------
+   DOORS & WINDOWS PRODUCT DATA
+--------------------------- */
+const productsArray = [
+{
+  id: "dw-upvc-window",
+  name: "uPVC Sliding Window",
+  price: 3800,
+  tags: ["uPVC", "Soundproof"],
+  img: "{% static 'images/windows-door/upvc windows.PNG' %}",
+  desc: "High-quality uPVC sliding window with sound insulation and weather resistance. Perfect for modern homes and offices. Provides excellent sound reduction, weather-resistant and long-lasting, smooth sliding operation with secure locking. Ideal for bedrooms and living rooms."
+},
+  {
+    id: "dw-upvc-door",
+    name: "uPVC Door",
+    price: 5200,
+    tags: ["Waterproof","Durable"],
+    img: "{% static 'images/windows-door/upvc door.PNG' %}",
+    desc: "Stylish uPVC door for bathrooms and balconies, anti-rust and waterproof Rust-proof and waterproof material Ideal for bathrooms and balconies Strong frame with long life Easy to clean and maintain Modern premium design."
+  },
+  {
+    id: "dw-wood-door",
+    name: "Wooden Door",
+    price: 8500,
+    tags: ["Premium","Hardwood"],
+    img: "{% static 'images/windows-door/wooden door.PNG' %}",
+    desc: "Solid wooden door made from premium hardwood with long-lasting finish Made using premium high-grade wood Strong, durable and long-lasting Perfect for main doors and rooms Luxurious wooden texture finish Adds elegance to your home."
+  },
+  {
+    id: "dw-hdf-door",
+    name: "Fiber Door",
+    price: 4500,
+    tags: ["Interior","Smooth"],
+    img: "{% static 'images/windows-door/fiber door.PNG' %}",
+    desc: "Smooth-finish HDF molded door ideal for interior rooms.Lightweight and easy to install Perfect for bedrooms and interiors Smooth finish with strong structure Budget-friendly and stylish Moisture-resistant surface."
+  },
+  {
+    id: "dw-metal-door",
+    name: "Steel Security Door",
+    price: 12500,
+    tags: ["Security","Heavy-duty"],
+    img: "{% static 'images/windows-door/steel door.PNG' %}",
+    desc: "Heavy-duty steel door with multi-locking system for maximum security.High-strength steel construction Multi-locking protection system Best for safety and security Rust-free powder coating Ideal for main entrance."
+  },
+  {
+    id: "dw-aluminium-window",
+    name: "Aluminium Sliding Window",
+    price: 3300,
+    tags: ["Aluminium","Sliding"],
+    img: "{% static 'images/windows-door/aluminium window.PNG' %}",
+    desc: "Lightweight aluminium sliding window with powder-coated frame. Lightweight and durable material. Smooth sliding mechanism. Powder-coated rust-proof frame. Ideal for kitchens & balconies. Low maintenance and long life."
+  },
+  {
+    id: "dw-ventilator",
+    name: "Teak Door",
+    price: 1500,
+    tags: ["Ventilation","Aluminium"],
+    img: "{% static 'images/windows-door/Teak door.png' %}",
+    desc: "Aluminium ventilator window for bathrooms and utility rooms.Perfect for bathroom ventilation.Allows airflow while maintaining privacy.Strong aluminium frame.Rust-proof and long-lasting.Lightweight and easy installation."
+  },
+  {
+    id: "dw-mosquito-mesh",
+    name: "Mosquito Mesh Door",
+    price: 2200,
+    tags: ["Mesh","Insect-proof"],
+    img: "{% static 'images/windows-door/Mosquito Mesh Door.png' %}",
+    desc: "Strong mesh door designed for insect protection with proper airflow. Protects from mosquitoes & insects, Allows smooth airflow inside home,Durable mesh with strong frame,Best for balconies & kitchens,Easy to open and lightweight."
+  },
+  {
+    id: "dw-window-grill",
+    name: "Steel Window Grill",
+    price: 1800,
+    tags: ["MS","Grill"],
+    img: "{% static 'images/windows-door/steel window...PNG' %}",
+    desc: "Mild steel window grill with powder-coating for enhanced durability.Strong mild-steel construction,Protects home from theft,Powder-coated rust resistance,Perfect for all window sizes,Long-lasting and stylish grill."
+  },
+  {
+    id: "dw-glass-door",
+    name: "Tempered Glass Door",
+    price: 9500,
+    tags: ["Glass","Modern"],
+    img: "{% static 'images/windows-door/Tempered Glass Door.png' %}",
+    desc: "Stylish tempered glass door suitable for offices and modern homes.Premium tempered glass panel Ideal for offices & showrooms Modern and elegant appearance Strong impact-resistant glass Smooth opening and closing."
+    }
+];
+
+/* -----------------------------------------
+   RENDER PRODUCTS
+------------------------------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+
+</script>
+
+
+{% endblock %}

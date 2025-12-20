@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+  <h1 class="page-title">Sanitaryware</h1>
+  <div class="category-title">Toilets, Basins, Faucets & Bathroom Fittings</div>
+
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- QUICK VIEW MODAL -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog">
+  <div class="modal-box">
+
+    <button id="closeModal" class="modal-close" aria-label="Close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="product image">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc" class="modal-desc"></p>
+
+      <div id="modalTags" class="tag-container"></div>
+
+      <h3 class="modal-price">₹<span id="modalPrice"></span></h3>
+
+      <label for="modalQty">Qty</label>
+      <input type="number" id="modalQty" value="1" min="1" class="qty-input">
+
+      <div class="modal-buttons">
+        <button class="add-btn" id="modalAddToCart">Add to cart</button>
+        <a href="#" class="order-btn">Go to order</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ---------------------------
+   SANITARYWARE PRODUCTS
+--------------------------- */
+const productsArray = [
+  {
+    id: "sanitary-easyflush",
+    name: "Close-Coupled WC (Easy Flush)",
+    price: 5200,
+    tags: ["Water-saving","Comfort","Dual Flush","Ceramic","Durable"],
+    img: "{% static 'images/sanitaryware/Close-Coupled WC (Easy Flush).png' %}",
+    desc: "Modern close-coupled WC with dual flush mechanism."
+  },
+  {
+    id: "sanitary-wall-hung",
+    name: "Wall Hung Closet",
+    price: 8900,
+    tags: ["Wall-hung","Concealed","Space-saving","Modern","Durable"],
+    img: "{% static 'images/sanitaryware/Wall Hung Closet.png' %}",
+    desc: "Elegant wall hung closet for modern bathrooms."
+  },
+  {
+    id: "sanitary-pt-commode",
+    name: "P-Trap Floor Mounted Pan",
+    price: 4200,
+    tags: ["Durable","Standard","Ceramic","Classic","Water-saving"],
+    img: "{% static 'images/sanitaryware/P-Trap Floor Mounted Pan.png' %}",
+    desc: "Classic floor mounted pan for standard plumbing."
+  },
+  {
+    id: "sanitary-counter-basin",
+    name: "Counter Top Basin",
+    price: 2999,
+    tags: ["Ceramic","Designer","Modern","Durable","Easy-clean"],
+    img: "{% static 'images/sanitaryware/Counter Top Basin.png' %}",
+    desc: "Designer counter top basin with smooth ceramic finish."
+  },
+  {
+    id: "sanitary-commode-seat",
+    name: "Soft-Close Seat Cover",
+    price: 799,
+    tags: ["Soft-close","Comfort","Durable","Universal","Hygienic"],
+    img: "{% static 'images/sanitaryware/Soft-Close Seat Cover.png' %}",
+    desc: "Universal soft-close WC seat cover."
+  },
+  {
+    id: "sanitary-washbasin-pillar",
+    name: "Pillar Cock Faucet",
+    price: 799,
+    tags: ["Brass","Chrome","Durable","Elegant","Easy-install"],
+    img: "{% static 'images/sanitaryware/Pillar Cock Faucet.png' %}",
+    desc: "Brass pillar cock with chrome finish."
+  },
+  {
+    id: "sanitary-mixer-wall",
+    name: "Wall Mixer (Bath)",
+    price: 2299,
+    tags: ["Mixer","Bath","Durable","Chrome","Easy-clean"],
+    img: "{% static 'images/sanitaryware/Wall Mixer (Bath).png' %}",
+    desc: "Wall mounted bath mixer with smooth control."
+  },
+  {
+    id: "sanitary-shower",
+    name: "Hand Shower Set",
+    price: 1299,
+    tags: ["Hand shower","Chrome","Flexible","Durable","Easy-install"],
+    img: "{% static 'images/sanitaryware/Hand Shower Set (With Hose).png' %}",
+    desc: "Hand shower with flexible hose and wall holder."
+  },
+  {
+    id: "sanitary-flush-tank",
+    name: "Concealed Cistern",
+    price: 3999,
+    tags: ["Concealed","Dual flush","Durable","Space-saving","Modern"],
+    img: "{% static 'images/sanitaryware/Concealed Cistern (In-wall).png' %}",
+    desc: "In-wall concealed cistern for modern toilets."
+  },
+  {
+    id: "sanitary-bidet",
+    name: "Health Faucet (Bidet)",
+    price: 599,
+    tags: ["Hygiene","Stainless","Durable","Easy-install","Comfort"],
+    img: "{% static 'images/sanitaryware/Health Faucet (Bidet Spray).png' %}",
+    desc: "Stainless steel bidet spray for hygiene."
+  }
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+
+<!-- MAIN CONTENT -->
+<header class="header container"></header>
+<main class="container">
+  <h1 class="page-title">Cement</h1>
+  <div class="category-title">All Cement Products</div>
+  </div>
+</header>
+
+  <!-- ✅ PRODUCTS GRID -->
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- ===========================
+     QUICK VIEW MODAL
+=========================== -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <button id="closeModal" class="modal-close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+
+      <div id="modalTags" class="tags"></div>
+
+      <h3>₹<span id="modalPrice"></span></h3>
+
+      <input id="modalQty" type="number" min="1" value="1">
+      <button id="modalAddToCart">Add to cart</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+
+/* ---------------------------
+   CEMENT PRODUCT DATA
+--------------------------- */
+const productsArray = [
+  {
+    id: "cement-opc53",
+    name: "OPC 53 Grade Cement",
+    price: 450,
+    tags: ["High strength","Fast setting","Structural works","Bulk booking available"],
+    img: "{% static 'images/cement/OPC53GradeCement.jpg' %}",
+    desc: "Ordinary Portland Cement 53 grade — high early strength for structural concrete."
+  },
+  {
+    id: "cement-opc43",
+    name: "OPC 43 Grade Cement",
+    price: 420,
+    tags: ["Standard","Durable","General construction","Bulk purchase discount"],
+    img: "{% static 'images/cement/OPC43GradeCement.jpg' %}",
+    desc: "OPC 43 grade suitable for general construction, durable and cost efficient."
+  },
+  {
+    id: "cement-ppc",
+    name: "PPC Cement (Pozzolana)",
+    price: 390,
+    tags: ["Low heat","Smooth finish","Eco-friendly","Bulk order available","General construction"],
+    img: "{% static 'images/cement/PPCCement(Pozzolana)Bag.jpg' %}",
+    desc: "Pozzolana Portland Cement — improved workability and reduced heat of hydration."
+  },
+  {
+    id: "cement-psc",
+    name: "PSC Cement (Portland Slag)",
+    price: 400,
+    tags: ["Slag mix","Marine use","Corrosion resistant","Bulk booking discount"],
+    img: "{% static 'images/cement/PSCCement(Portland Slag)Bag.jpg' %}",
+    desc: "Portland Slag Cement — resistant to chemical attack, suitable for marine environments."
+  },
+  {
+    id: "cement-white",
+    name: "White Cement",
+    price: 650,
+    tags: ["Premium finish","Tiles","Decorative works","Bulk supply available"],
+    img: "{% static 'images/cement/WhiteCementBag.jpg' %}",
+    desc: "White cement for decorative and architectural finishes."
+  },
+  {
+    id: "cement-rapid",
+    name: "Rapid Hardening Cement",
+    price: 480,
+    tags: ["Fast set","Early strength","Repair works","Bulk booking","General House Construction"],
+    img: "{% static 'images/cement/Rapid Hardening Cement.png' %}",
+    desc: "Rapid Hardening Cement — quick strength gain for repairs."
+  },
+  {
+    id: "cement-lowheat",
+    name: "Low Heat Cement",
+    price: 500,
+    tags: ["Mass concrete","Low temperature","Large projects","Bulk orders accepted", "Brand"],
+    img: "{% static 'images/cement/Low Heat Cement.png' %}",
+    desc: "Low heat cement used for large mass concrete works."
+  },
+  {
+    id: "cement-sr",
+    name: "Shakti Cement",
+    price: 520,
+    tags: ["Chemical resistance","Durable","Sulfate protection","Bulk booking available"],
+    img: "{% static 'images/cement/shakthicement.png' %}",
+    desc: "Sulfate Resisting Cement for aggressive soil conditions."
+  },
+  {
+    id: "cement-masonry",
+    name: "Ultra Cement",
+    price: 350,
+    tags: ["Brick masonry","Smooth","Mortar use","Bulk supply"],
+    img: "{% static 'images/cement/ultra-cement.jpg' %}",
+    desc: "Masonry cement optimized for brick and block mortar."
+  },
+  {
+    id: "cement-ramco",
+    name: "Ramco Cement",
+    price: 520,
+    tags: ["Consistent","Ready mix","Bulk order discount"],
+    img: "{% static 'images/cement/ramco.png' %}",
+    desc: "Ramco cement for consistent quality and reliable site performance."
+  }
+];
+
+
+/* -----------------------------------------
+   RENDER PRODUCTS
+------------------------------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+
+</script>
+
+
+{% endblock %}

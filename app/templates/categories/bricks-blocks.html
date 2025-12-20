@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+
+<main class="container">
+  <h1 class="page-title">Bricks & Blocks</h1>
+  <div class="category-title">All Bricks & Blocks Products</div>
+
+  <!-- ✅ PRODUCTS GRID -->
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- ===========================
+     QUICK VIEW MODAL
+=========================== -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <button id="closeModal" class="modal-close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+
+      <div id="modalTags" class="tags"></div>
+
+      <h3>₹<span id="modalPrice"></span></h3>
+
+      <input id="modalQty" type="number" min="1" value="1">
+      <button id="modalAddToCart">Add to cart</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ===========================
+   BRICKS & BLOCKS PRODUCTS
+=========================== */
+const productsArray = [
+    {
+    id: "brick-red-clay",
+    name: "Red Clay Brick",
+    price: 12,
+    tags: ["Durable","Standard","Traditional","General Masonry","General Construction"],
+     img: "{% static 'images/bricks/redbricks.png' %}",
+    desc: "Traditional red clay brick — strong, durable and suitable for general masonry."
+  },
+   {
+    id: "brick-aac",
+    name: "Autoclaved Block",
+    price: 49,
+    tags: ["Bulk Booking","Lightweight","Insulated","Eco-Friendly","Thermal Block","General Construction"],
+    img: "{% static 'images/bricks/Autoclavedblock.png' %}",
+    desc: "Autoclaved Aerated Concrete block — lightweight, thermal insulated and easy to lay."
+  },
+  {
+    id: "brick-flyash",
+    name: "Burning Fly Ash Brick",
+    price: 18,
+    tags: ["Bulk Booking","Eco-Friendly","Strong","Low Water Absorption","High Strength"],
+    img: "{% static 'images/bricks/Burnt clay bricks.png' %}",
+    desc: "Manufactured from fly ash — eco-friendly & good compressive strength."
+  },
+  {
+    id: "brick-cement-solid",
+    name: "Cement Solid Block",
+    price: 32,
+    tags: ["Bulk Booking","Load Bearing","Heavy-Duty","High Strength","Construction Grade"],
+    img: "{% static 'images/bricks/Flyashbricks.png' %}",
+    desc: "Solid cement block for load-bearing walls and heavy structural work."
+  },
+  {
+    id: "brick-hollow",
+    name: "Hollow Block",
+    price: 28,
+    tags: ["Bulk Booking","Lightweight","Partition","Cost Effective","Non Load Bearing"],
+    img: "{% static 'images/bricks/Hollow concrete blocks.png' %}",
+    desc: "Hollow concrete block — lightweight and used for non-load bearing partitions."
+  },
+    {
+    id: "brick-interlock",
+    name: "Cement Brick",
+    price: 45,
+    tags: ["Bulk Booking","Fast Build","Eco","Interlocking","Low Mortar Usage","General Construction"],
+    img: "{% static 'images/bricks/solidblocks.jpg' %}",
+    desc: "Interlocking block for fast construction and minimal mortar joints."
+  },
+   {
+    id: "brick-fire",
+    name: "Glass Brick",
+    price: 60,
+    tags: ["Bulk Booking","Heat Resistant","Fireproof","Interior Design","Decorative Brick"],
+    img: "{% static 'images/bricks/Glass bricks bloc.png' %}",
+    desc: "High-temperature resistant fire brick — ideal for furnaces and kilns."
+  },
+   {
+    id: "brick-engineering",
+    name: "Engineering Brick",
+    price: 25,
+    tags: ["Bulk Booking","High Strength","Dense","Low Porosity","Moisture Resistant"],
+    img: "{% static 'images/bricks/engineering block.webp' %}",
+    desc: "Engineering brick with high compressive strength and low porosity."
+  },
+{
+    id: "brick-concrete",
+    name: "Clinker Bricks",
+    price: 35,
+    tags: ["Bulk Booking","Versatile","Cost Effective","Durable",],
+    img: "{% static 'images/bricks/Clinker bricks.png' %}",
+    desc: "General purpose concrete block used for walls, foundations and landscaping."
+  },
+  {
+    id: "brick-facing",
+    name: "Solid Brick",
+    price: 40,
+    tags: ["Bulk Booking","Aesthetic","Finish","Exterior","Textured Surface"],
+    img: "{% static 'images/bricks/Sand-lime (calcium silicate) bricks .png' %}",
+    desc: "Facing brick for exterior finishes — available in various textures and colors."
+  },
+  {
+    id: "brick-facing",
+    name: "Clay Brick",
+    price: 40,
+    tags: ["Bulk Booking","Clay","Finish","Traditional","Exterior Use"],
+    img: "{% static 'images/bricks/claybrick.jpg' %}",
+    desc: "Facing brick for exterior finishes — available in various textures and colors."
+  }
+];
+
+
+
+/* -----------------------------------------
+   RENDER PRODUCTS
+------------------------------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+{% endblock %}

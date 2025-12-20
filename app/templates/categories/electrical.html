@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'roofing' %}">Roofing</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+  <h1 class="page-title">Electrics</h1>
+  <div class="category-title">All Electrics Products</div>
+
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- ===========================
+     QUICK VIEW MODAL
+=========================== -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog">
+  <div class="modal-box">
+
+    <button id="closeModal" class="modal-close" aria-label="Close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="product image">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc" class="modal-desc"></p>
+
+      <div id="modalTags" class="tag-container"></div>
+
+      <h3 class="modal-price">₹<span id="modalPrice"></span></h3>
+
+      <label for="modalQty">Qty</label>
+      <input type="number" id="modalQty" value="1" min="1" class="qty-input">
+
+      <div class="modal-buttons">
+        <button class="add-btn" id="modalAddToCart">Add to cart</button>
+        <a href="#" class="order-btn">Go to order</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ---------------------------
+   ELECTRICS PRODUCTS
+--------------------------- */
+const productsArray = [
+  {
+    id: "ele-switch-modular",
+    name: "Modular Switch (1 Gang)",
+    price: 89,
+    tags: ["Modular","Durable","Smooth Click","Premium Quality","Bulk Booking"],
+    img: "{% static 'images/electric/switchbox.png' %}",
+    desc: "High-quality modular 1-gang switch with smooth operation and long life."
+  },
+  {
+    id: "ele-socket-3pin",
+    name: "3-Pin Socket (Universal)",
+    price: 129,
+    tags: ["Universal","Shockproof","Child Safe","High Quality","Bulk Booking"],
+    img: "{% static 'images/electric/3sockets.png' %}",
+    desc: "Universal 3-pin socket with child-safe shutter protection."
+  },
+  {
+    id: "ele-mcb-6a",
+    name: "MCB 6A (C Curve)",
+    price: 299,
+    tags: ["Protection","Reliable","IS Certified","Bulk Order"],
+    img: "{% static 'images/electric/mcb.png' %}",
+    desc: "6A MCB for lighting circuits providing overload and short-circuit protection."
+  },
+  {
+    id: "ele-door-bell",
+    name: "Door Bell",
+    price: 349,
+    tags: ["Clear Sound","Energy Efficient","Easy Install","Bulk Booking"],
+    img: "{% static 'images/electric/electricdoorbell.jpg' %}",
+    desc: "High-quality electric door bell with clear sound output."
+  },
+  {
+    id: "ele-ceiling-fan",
+    name: "Ceiling Fan",
+    price: 1799,
+    tags: ["High Speed","Low Noise","Energy Saver","Copper Motor"],
+    img: "{% static 'images/electric/electricCeilingFan.jpg' %}",
+    desc: "Energy efficient ceiling fan with powerful air delivery."
+  },
+  {
+    id: "ele-db-box",
+    name: "Distribution Board (12 Way)",
+    price: 2499,
+    tags: ["Metal Body","Safe Wiring","IS Standard","Premium Build"],
+    img: "{% static 'images/electric/electricLEDStriplight.jpg' %}",
+    desc: "12-way distribution board with metal enclosure for safety."
+  },
+  {
+    id: "ele-led-tube",
+    name: "LED Tube Light (9W)",
+    price: 199,
+    tags: ["Energy Saver","Bright","Long Life","Eco Friendly"],
+    img: "{% static 'images/electric/electricTubeLight.jpg' %}",
+    desc: "9W LED tube light offering bright and uniform illumination."
+  },
+  {
+    id: "ele-panel-12w",
+    name: "LED Panel Light (12W)",
+    price: 599,
+    tags: ["Slim Design","Modern Look","Soft Light","Energy Efficient"],
+    img: "{% static 'images/electric/LED Panel Light (12W).jpg' %}",
+    desc: "Modern slim LED panel light perfect for ceilings."
+  },
+  {
+    id: "ele-ceiling-fan-1200",
+    name: "Ceiling Fan (1200mm)",
+    price: 2499,
+    tags: ["Silent","High Airflow","Copper Motor","Energy Saver"],
+    img: "{% static 'images/electric/Fan.jpg' %}",
+    desc: "1200mm ceiling fan designed for powerful airflow and quiet operation."
+  },
+  {
+    id: "ele-wire-2_5",
+    name: "FRLS Copper Wire 2.5 sqmm",
+    price: 85,
+    tags: ["Pure Copper","FRLS","High Safety","Durable"],
+    img: "{% static 'images/electric/Wiressqmm.jpg' %}",
+    desc: "FRLS copper wire suitable for safe and durable house wiring."
+  }
+];
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+ <div class="nav">
+      <a href="{% url 'category' 'aggregates' %}">Aggregates</a>
+      <a href="{% url 'category' 'bricks-blocks' %}">Bricks</a>
+      <a href="{% url 'category' 'cement' %}">Cement</a>
+      <a href="{% url 'category' 'doors-windows' %}">Doors</a>
+      <a href="{% url 'category' 'electrical' %}">Electrical</a>
+      <a href="{% url 'category' 'glass-glazing' %}">Glass</a>
+      <a href="{% url 'category' 'flooring' %}">Flooring</a>
+      <a href="{% url 'category' 'interior-designs' %}">Interior Designs</a>
+      <a href="{% url 'category' 'insulation' %}">Insulation</a>
+      <a href="{% url 'category' 'plumbing' %}">Plumbing</a>
+      <a href="{% url 'category' 'paints' %}">Paints</a>
+      <a href="{% url 'category' 'sanitaryware' %}">Sanitaryware</a>
+      <a href="{% url 'category' 'sand' %}">Sand</a>
+      <a href="{% url 'category' 'tmt' %}">TMT Bars</a>
+  </div>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+  <h1 class="page-title">Roofing</h1>
+  <div class="category-title">Roofing Sheets, Tiles & Accessories</div>
+
+  <section class="grid" id="products-grid"></section>
+</main>
+
+<!-- QUICK VIEW MODAL -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog">
+  <div class="modal-box">
+
+    <button id="closeModal" class="modal-close" aria-label="Close">×</button>
+
+    <div class="modal-left">
+      <img id="modalImg" class="modal-img" alt="product image">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc" class="modal-desc"></p>
+
+      <div id="modalTags" class="tag-container"></div>
+
+      <h3 class="modal-price">₹<span id="modalPrice"></span></h3>
+
+      <label for="modalQty">Qty</label>
+      <input type="number" id="modalQty" value="1" min="1" class="qty-input">
+
+      <div class="modal-buttons">
+        <button class="add-btn" id="modalAddToCart">Add to cart</button>
+        <a href="#" class="order-btn">Go to order</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'js/cart.js' %}"></script>
+
+<script>
+/* ---------------------------
+   ROOFING PRODUCTS
+--------------------------- */
+const productsArray = [
+  {
+    id: "roof-gi-sheet",
+    name: "GI Corrugated Sheet (0.5mm)",
+    price: 2200,
+    tags: ["Galvanized","Durable","Industrial","Rustproof","Strong"],
+    img: "{% static 'images/roofing/GI Corrugated Sheet (0.5mm).jpeg' %}",
+    desc: "Galvanized corrugated sheet for industrial roofing."
+  },
+  {
+    id: "roof-color-coated",
+    name: "Color Coated Roofing Sheet",
+    price: 2750,
+    tags: ["Pre-painted","Aesthetic","Durable","UV Resistant","Lightweight"],
+    img: "{% static 'images/roofing/Color Coated Roofing Sheet.jpeg' %}",
+    desc: "Pre-painted roofing sheet with UV-resistant coating."
+  },
+  {
+    id: "roof-aluminium",
+    name: "Aluminium Roof Sheet",
+    price: 4200,
+    tags: ["Lightweight","Rustproof","Durable","Reflective","Easy Install"],
+    img: "{% static 'images/roofing/Aluminium Roof Sheet.jpeg' %}",
+    desc: "Lightweight aluminium roofing sheet with heat reflection."
+  },
+  {
+    id: "roof-polycarbonate",
+    name: "Polycarbonate Sheet",
+    price: 1800,
+    tags: ["Transparent","Impact Resistant","UV Protected","Lightweight"],
+    img: "{% static 'images/roofing/Polycarbonate Sheet (Corrugated).jpeg' %}",
+    desc: "Transparent polycarbonate sheet ideal for skylights."
+  },
+  {
+    id: "roof-upvc",
+    name: "UPVC Roofing Sheet",
+    price: 1500,
+    tags: ["Waterproof","Lightweight","Durable","Insulated"],
+    img: "{% static 'images/roofing/uPVC Roofing Sheet.jpeg' %}",
+    desc: "Waterproof UPVC sheet for sheds and canopies."
+  },
+  {
+    id: "roof-asphalt",
+    name: "Asphalt Shingles",
+    price: 3200,
+    tags: ["Shingle","Waterproof","Flexible","UV Resistant","Economical"],
+    img: "{% static 'images/roofing/Asphalt Shingles.jpeg' %}",
+    desc: "Asphalt shingles for pitched roof applications."
+  },
+  {
+    id: "roof-clay-tile",
+    name: "Clay Roofing Tile",
+    price: 75,
+    tags: ["Traditional","Terracotta","Eco-friendly","Insulating"],
+    img: "{% static 'images/roofing/Clay Roofing Tile.jpeg' %}",
+    desc: "Traditional clay roofing tiles. Price per piece."
+  },
+  {
+    id: "roof-concrete-tile",
+    name: "Concrete Roof Tile",
+    price: 65,
+    tags: ["Strong","Economical","Weatherproof","Durable"],
+    img: "{% static 'images/roofing/Concrete Roof Tile.jpeg' %}",
+    desc: "Concrete roof tiles for residential construction."
+  },
+  {
+    id: "roof-bitumen",
+    name: "Bitumen Felt Membrane",
+    price: 950,
+    tags: ["Waterproof","Flexible","Durable","UV Resistant","Underlayer"],
+    img: "{% static 'images/roofing/Bitumen Felt (Membrane).jpeg' %}",
+    desc: "Bitumen membrane for flat roof waterproofing."
+  },
+  {
+    id: "roof-ridge",
+    name: "Metal Ridge Cap",
+    price: 220,
+    tags: ["Accessories","Finish","Waterproof","Metal","Durable"],
+    img: "{% static 'images/roofing/Ridge Cap.png' %}",
+    desc: "Metal ridge cap used for roof finishing."
+  },
+  {
+    id: "roof-purlin",
+    name: "C Channel Purlin",
+    price: 320,
+    tags: ["Structural","Support","Metal","Durable","Easy Install"],
+    img: "{% static 'images/roofing/Purlin (C Channel) without background .png' %}",
+    desc: "C-channel purlin for roofing structure support."
+  },
+  {
+    id: "roof-sandwich",
+    name: "Insulated Sandwich Panel",
+    price: 5200,
+    tags: ["Insulated","Thermal","Cold Room","Durable","Lightweight"],
+    img: "{% static 'images/roofing/Insulated Sandwich Panel.jpeg' %}",
+    desc: "PU insulated sandwich panels for cold storage roofs."
+  }
+];
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(productsArray, "products-grid");
+  updateCartBadge();
+});
+</script>
+
+{% endblock %}

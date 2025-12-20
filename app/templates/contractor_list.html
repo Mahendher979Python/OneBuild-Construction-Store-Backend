@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<style>
+/* ------------------ GRID STYLING ------------------ */
+.contractor-title {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.contractor-grid {
+    display: grid;
+    padding: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.contractor-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+    transition: 0.3s;
+}
+
+.contractor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+}
+
+.contractor-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.contractor-business {
+    color: #4f46e5;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.contractor-info {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 3px 0;
+}
+
+.profile-btn {
+    margin-top: 15px;
+    background: #4f46e5;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.profile-btn:hover {
+    background: #3929cc;
+}
+
+/* ------------------ POPUP MODAL ------------------ */
+.popup-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.popup-box {
+    background: #fff;
+    padding: 24px;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 14px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    animation: scaleIn 0.3s ease-out;
+}
+
+.popup-box h2 {
+    margin-top: 0;
+    text-align: center;
+    color: #111827;
+}
+
+.close-btn {
+    margin-top: 20px;
+    background: #ef4444;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    font-size: 15px;
+}
+
+/* ------------------ ANIMATIONS ------------------ */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+</style>
+
+
+<!-- ===================== PAGE TITLE ===================== -->
+<h1 class="contractor-title">Registered Contractors</h1>
+
+<!-- ===================== CONTRACTOR GRID ===================== -->
+<div class="contractor-grid">
+    {% for s in sellers %}
+        <div class="contractor-card">
+
+            <h3>{{ s.first_name }} {{ s.surname }}</h3>
+            <p class="contractor-business">{{ s.business_name }}</p>
+
+            <p class="contractor-info">📞 {{ s.phone }}</p>
+            <p class="contractor-info">📧 {{ s.email }}</p>
+            <p class="contractor-info">📍 {{ s.city }}</p>
+            <p class="contractor-info">⭐ {{ s.rating }}</p>
+
+            <button class="profile-btn"
+                onclick="openProfile('{{ s.first_name }}',
+                                     '{{ s.surname }}',
+                                     '{{ s.business_name }}',
+                                     '{{ s.city }}',
+                                     '{{ s.phone }}',
+                                     '{{ s.email }}',
+                                     '{{ s.aadhaar }}',
+                                     '{{ s.description|escapejs }}',
+                                     '{{ s.rating }}')">
+                View Profile
+            </button>
+
+        </div>
+    {% endfor %}
+</div>
+
+
+<!-- ===================== POPUP MODAL ===================== -->
+<div class="popup-bg" id="popupBg">
+
+    <div class="popup-box">
+        <h2 id="p_name"></h2>
+
+        <p><strong>Business:</strong> <span id="p_business"></span></p>
+        <p><strong>City:</strong> <span id="p_city"></span></p>
+        <p><strong>Phone:</strong> <span id="p_phone"></span></p>
+        <p><strong>Email:</strong> <span id="p_email"></span></p>
+        <p><strong>Aadhaar:</strong> <span id="p_aadhaar"></span></p>
+        <p><strong>Rating:</strong> ⭐ <span id="p_rating"></span></p>
+        <p><strong>Description:</strong> <span id="p_description"></span></p>
+
+        <button onclick="closePopup()" class="close-btn">Close</button>
+    </div>
+</div>
+
+
+<!-- ===================== JS FUNCTIONS ===================== -->
+<script>
+function openProfile(name, surname, business, city, address, phone, email, aadhaar, rating){
+    document.getElementById("p_name").textContent = name + " " + surname;
+    document.getElementById("p_business").textContent = business;
+    document.getElementById("p_city").textContent = city;
+    document.getElementById("p_phone").textContent = phone;
+    document.getElementById("p_email").textContent = email;
+    document.getElementById("p_aadhaar").textContent = aadhaar;
+    document.getElementById("p_description").textContent = description;
+    document.getElementById("p_rating").textContent = rating;
+
+    document.getElementById("popupBg").style.display = "flex";
+}
+
+function closePopup(){
+    document.getElementById("popupBg").style.display = "none";
+}
+</script>
+
+{% endblock %}
