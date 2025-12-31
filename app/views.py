@@ -1,39 +1,378 @@
-import json
+import json, uuid, time, hmac, hashlib
 import razorpay
-import hmac
-import hashlib
+import random
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import  get_user_model
+
+from django.contrib import messages
+from django.utils.timezone import now
+from django.utils.crypto import get_random_string
+from django.template.loader import get_template
 from django.conf import settings
+from django.contrib.auth.models import User
 
-from .models import Order, OrderItem, Seller  # 🔥 THIS LINE FIXES EVERYTHING
+from xhtml2pdf import pisa
+import json
+
+from django.contrib.auth.decorators import login_required
+
+from .models import (
+    Category, Item, GalleryItem,
+    ContactMessage, Review, Seller,
+    Address, Order, OrderItem,
+    PasswordOTP, LabourContract, CustomUser,
+)
+
+User = get_user_model()
+
+# ---------- REGISTER ----------
+def register(request):
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        email = request.POST.get("email", "").strip()
+        password = request.POST.get("password", "")
+
+        # 🔴 Basic validation
+        if not username or not email or not password:
+            messages.error(request, "All fields are required")
+            return redirect("register")
+
+        # 🔴 Username exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists")
+            return redirect("register")
+
+        # 🔴 Email exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already registered")
+            return redirect("register")
+
+        # ✅ Create user safely
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+        user.save()
+
+        messages.success(request, "Account created successfully ✅ Please login")
+        return redirect("login")
+
+    return render(request, "auth/register.html")
 
 
+# ----------  Login View (Username OR Gmail)----------
 
-# ======================
-# HOME & STATIC PAGES
-# ======================
+from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
+
+
+def login_view(request):
+    if request.method == "POST":
+        user_input = request.POST.get("username")  # username OR email
+        password = request.POST.get("password")
+
+        # ✅ filter instead of get (no crash)
+        users = User.objects.filter(
+            Q(username=user_input) | Q(email=user_input)
+        )
+
+        if not users.exists():
+            messages.error(request, "User not found ❌")
+            return redirect("login")
+
+        if users.count() > 1:
+            messages.error(request, "Multiple accounts found. Use username ❌")
+            return redirect("login")
+
+        user = users.first()
+
+        # ✅ authenticate using username
+        auth_user = authenticate(
+            request,
+            username=user.username,
+            password=password
+        )
+
+        if auth_user is None:
+            messages.error(request, "Invalid password ❌")
+            return redirect("login")
+
+        login(request, auth_user)
+        messages.success(request, "Login successful ✅")
+        return redirect("home")
+
+    return render(request, "auth/login.html")
+
+# ---------- LOGOUT ----------
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")
+
+# ---------- FORGOT PASSWORD ----------
+
+import random
+from django.core.mail import send_mail
+
+
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+
+        try:
+            send_mail(
+                "OneBuild Password Reset OTP",
+                "Your OTP is 123456",
+                None,
+                [email],
+                fail_silently=False,
+            )
+            messages.success(request, "OTP sent to your email")
+        except Exception as e:
+            messages.error(
+                request,
+                "Email temporarily blocked by Gmail. Try again after few minutes."
+            )
+            print("SMTP ERROR:", e)
+
+        return redirect("forgot_password")
+
+    return render(request, "auth/forgot_password.html")
+
+# ---------- RESET PASSWORD ----------
+
+def reset_password(request):
+    if request.method == "POST":
+        otp = request.POST["otp"]
+        password = request.POST["password"]
+
+        user_id = request.session.get("reset_user")
+        user = User.objects.get(id=user_id)
+
+        otp_obj = PasswordOTP.objects.filter(
+            user=user, otp=otp, is_used=False
+        ).first()
+
+        if not otp_obj:
+            messages.error(request, "Invalid OTP")
+            return redirect("reset_password")
+
+        user.set_password(password)
+        user.save()
+
+        otp_obj.is_used = True
+        otp_obj.save()
+
+        messages.success(request, "Password reset successful")
+        return redirect("login")
+
+    return render(request, "auth/reset_password.html")
+
+# ---------- DASHBOARD ----------
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def dashboard(request):
+    return render(request, "auth/dashboard.html")
+
+# ======================================================
+# HOME
+# ======================================================
+
 def home(request):
     return render(request, "index.html")
-
-
-def house_cost_calculator(request):
-    return render(request, "house_cost_calculator.html")
 
 
 def house_categories(request):
     return render(request, "house_categories.html")
 
+# ======================================================
+# CUSTOMER SUPPORT
+# ======================================================
 
-def home_builder_contractor(request):
-    return render(request, "contractor_list.html")
+def faq_view(request):
+    return render(request, "customer_support/faq.html")
 
 
-# ======================
-# DYNAMIC CATEGORY PAGES
-# ======================
+def contact_view(request):
+    if request.method == "POST":
+        ContactMessage.objects.create(
+            name=request.POST.get("name"),
+            email=request.POST.get("email"),
+            phone=request.POST.get("phone"),
+            message=request.POST.get("message"),
+        )
+        messages.success(request, "Message sent successfully")
+        return redirect("contact")
+
+    return render(request, "customer_support/contact.html")
+
+
+def review_form(request):
+    if request.method == "POST":
+        Review.objects.create(
+            name=request.POST.get("name"),
+            email=request.POST.get("email"),
+            rating=request.POST.get("rating"),
+            comment=request.POST.get("comment"),
+            review_type=request.POST.get("review_type"),
+            product_name=request.POST.get("product_name"),
+            service_name=request.POST.get("service_name"),
+        )
+        return redirect("review_dashboard")
+
+    return render(request, "customer_support/reviews.html")
+
+
+def review_dashboard(request):
+    reviews = Review.objects.order_by("-created_at")
+    return render(request, "customer_support/review_dashboard.html", {
+        "reviews": reviews
+    })
+
+# ======================================================
+# HELPDESK / POLICIES
+# ======================================================
+
+def privacy_policy(request):
+    return render(request, "helpdesk/privacy_policy.html")
+
+
+def terms_conditions(request):
+    return render(request, "helpdesk/terms_conditions.html")
+
+
+def shipping_policy(request):
+    return render(request, "helpdesk/shipping_policy.html")
+
+
+def refund_policy(request):
+    return render(request, "helpdesk/refund_policy.html")
+
+# ======================================================
+# TOP NAVBAR / GALLERY
+# ======================================================
+
+def gallery_view(request):
+    gallery_items = GalleryItem.objects.all()
+    return render(request, "topnavabar/gallery.html", {
+        "gallery_items": gallery_items
+    })
+
+
+def career(request):
+    return render(request, "topnavabar/career.html")
+
+
+def about(request):
+    return render(request, "topnavabar/about.html")
+
+
+def blog_list(request):
+    return render(request, "topnavabar/blog.html")
+
+# ======================================================
+# CART & ORDERS
+# ======================================================
+
+def cart(request):
+    return render(request, "cart/cart.html")
+
+
+def checkout(request):
+    return render(request, "cart/checkout.html")
+
+
+def order_success(request):
+    return render(request, "cart/success.html")
+
+
+def order_details(request):
+    return render(request, "cart/order_details.html")
+
+@login_required
+def orders(request):
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+    return render(request, "cart/order_detail.html", {"orders": orders})
+
+
+@login_required
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id, user=request.user)
+    return render(request, "cart/order_detail.html", {
+        "order": order,
+        "items": order.items.all()
+    })
+
+
+@csrf_exempt
+def place_order(request):
+    if request.method != "POST":
+        return JsonResponse({"status": "error", "message": "Invalid request"})
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"status": "error", "message": "Invalid JSON"})
+
+    cart_items = data.get("items", [])
+    if not cart_items:
+        return JsonResponse({"status": "error", "message": "Cart empty"})
+
+    total = 0
+    for item in cart_items:
+        total += float(item["price"]) * int(item["qty"])
+
+    order = Order.objects.create(
+        user=request.user if request.user.is_authenticated else None,
+        total_amount=total,
+    )
+
+    # ✅ Save order items
+    for item in cart_items:
+        OrderItem.objects.create(
+            order=order,
+            product_id=item["id"],
+            product_name=item["name"],
+            price=item["price"],
+            qty=item["qty"],
+        )
+
+    # ✅ Save address
+    Address.objects.create(
+        order=order,
+        first_name=data.get("first_name"),
+        surname=data.get("surname"),
+        phone=data.get("phone"),
+        address=data.get("address"),
+        mandal=data.get("mandal"),
+        district=data.get("district"),
+        state=data.get("state"),
+        pincode=data.get("pincode"),
+        delivery_date=data.get("delivery_date"),
+    )
+
+    return JsonResponse({
+        "status": "success",
+        "order_id": order.order_id
+    })
+
+# ======================================================
+# PRODUCTS & CATEGORIES
+# ======================================================
+
+def product_view(request):
+    categories = Category.objects.all()
+    return render(request, "cart/product.html", {
+        "categories": categories
+    })
+
+
 CATEGORIES = {
     "aggregates": "Aggregates",
     "bricks-blocks": "Bricks & Blocks",
@@ -64,215 +403,96 @@ def category_page(request, slug):
     )
 
 
+
+
+
+
 # ======================
-# CART / CHECKOUT PAGES
+# SELLER REGISTER
 # ======================
-def cart_page(request):
-    return render(request, "cart/cart.html")
-
-
-def checkout_page(request):
-    razorpay_key = getattr(settings, "RAZORPAY_KEY_ID", "")
-    return render(request, "cart/checkout.html", {"RAZORPAY_KEY_ID": razorpay_key})
-
-
-def success_page(request):
-    return render(request, "cart/success.html")
-
-
-def orders_page(request):
-    # optional placeholder - use /admin for full order list
-    return render(request, "cart/order.html")
-
-
-# ---------------- PLACE ORDER ----------------
-@csrf_exempt
-def place_order(request):
-    if request.method != "POST":
-        return JsonResponse({"status": "error", "message": "Only POST allowed"}, status=405)
-
-    try:
-        data = json.loads(request.body.decode("utf-8"))
-    except json.JSONDecodeError:
-        return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
-
-    required = [
-        "first_name", "surname", "phone",
-        "address", "mandal", "district", "state", "pincode",
-        "delivery_date", "items"
-    ]
-
-    for f in required:
-        if f not in data:
-            return JsonResponse({"status": "error", "message": f"Missing field: {f}"}, status=400)
-
-    items = data.get("items") or []
-    if not isinstance(items, list) or len(items) == 0:
-        return JsonResponse({"status": "error", "message": "Cart is empty"}, status=400)
-
-    # compute total safely
-    try:
-        total = 0.0
-        for it in items:
-            price = float(it.get("price", 0) or 0)
-            qty = int(it.get("qty", 0) or 0)
-            total += price * qty
-    except Exception:
-        return JsonResponse({"status": "error", "message": "Invalid item data"}, status=400)
-
-    # create order
-    order = Order.objects.create(
-        first_name=data.get("first_name"),
-        surname=data.get("surname"),
-        phone=data.get("phone"),
-        address=data.get("address"),
-        mandal=data.get("mandal"),
-        district=data.get("district"),
-        state=data.get("state"),
-        pincode=data.get("pincode"),
-        delivery_date=data.get("delivery_date") or None,
-        total=total
-    )
-
-    # create order items
-    for it in items:
-        try:
-            OrderItem.objects.create(
-                order=order,
-                product_id=str(it.get("id", ""))[:200],
-                name=str(it.get("name", ""))[:300],
-                price=float(it.get("price", 0) or 0),
-                qty=int(it.get("qty", 0) or 0)
-            )
-        except Exception:
-            # rollback behaviour not implemented here (keep simple) — at least continue
-            continue
-
-    return JsonResponse({"status": "success", "order_id": order.id})
-
-
-# ---------------- RAZORPAY ORDER ----------------
-@csrf_exempt
-def create_razorpay_order(request):
-    if request.method != "POST":
-        return JsonResponse({"status": "error", "message": "Only POST allowed"}, status=405)
-
-    try:
-        payload = json.loads(request.body.decode("utf-8"))
-    except json.JSONDecodeError:
-        return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
-
-    db_order_id = payload.get("order_id")
-    if not db_order_id:
-        return JsonResponse({"status": "error", "message": "order_id required"}, status=400)
-
-    try:
-        order = Order.objects.get(id=int(db_order_id))
-    except Order.DoesNotExist:
-        return JsonResponse({"status": "error", "message": "Order not found"}, status=404)
-
-    # init razorpay client
-    client = razorpay.Client(
-        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
-    )
-
-    amount_paise = int(round(order.total * 100))
-    try:
-        razor_order = client.order.create({
-            "amount": amount_paise,
-            "currency": "INR",
-            "receipt": f"order_{order.id}",
-            "payment_capture": 1
-        })
-    except Exception as e:
-        return JsonResponse({"status": "error", "message": "Razorpay order creation failed", "detail": str(e)}, status=500)
-
-    # save razorpay order id to DB if field exists
-    razor_id = razor_order.get("id")
-    if razor_id:
-        try:
-            setattr(order, "razorpay_order_id", razor_id)
-            order.save(update_fields=["razorpay_order_id"])
-        except Exception:
-            pass
-
-    return JsonResponse({"status": "success", "razor_order": razor_order})
-
-
-# ---------------- VERIFY PAYMENT ----------------
-@csrf_exempt
-def verify_razorpay_payment(request):
-    if request.method != "POST":
-        return JsonResponse({"status": "error", "message": "Only POST allowed"}, status=405)
-
-    try:
-        data = json.loads(request.body.decode("utf-8"))
-    except json.JSONDecodeError:
-        return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
-
-    db_order_id = data.get("order_id")
-    payment_id = data.get("razorpay_payment_id")
-    razor_order_id = data.get("razorpay_order_id")
-    signature = data.get("razorpay_signature")
-
-    if not (db_order_id and payment_id and razor_order_id and signature):
-        return JsonResponse({"status": "error", "message": "Missing payment fields"}, status=400)
-
-    try:
-        order = Order.objects.get(id=int(db_order_id))
-    except Order.DoesNotExist:
-        return JsonResponse({"status": "error", "message": "Order not found"}, status=404)
-
-    # server-side signature verification
-    expected = hmac.new(
-        settings.RAZORPAY_KEY_SECRET.encode(),
-        (str(razor_order_id) + "|" + str(payment_id)).encode(),
-        hashlib.sha256
-    ).hexdigest()
-
-    if expected != signature:
-        # mark failed if model has payment_status
-        try:
-            order.payment_status = "failed"
-            order.save(update_fields=["payment_status"])
-        except Exception:
-            pass
-        return JsonResponse({"status": "error", "message": "Invalid signature"}, status=400)
-
-    # success: save payment details
-    try:
-        order.payment_id = payment_id
-        order.payment_status = "paid"
-        order.save(update_fields=["payment_id", "payment_status"])
-    except Exception:
-        pass
-
-    return JsonResponse({"status": "success"})
-
-
-# Seler Registrations..............
-
 def seller_register(request):
     if request.method == "POST":
         Seller.objects.create(
-            surname=request.POST.get("surname"),
-            first_name=request.POST.get("firstName"),
-            email=request.POST.get("gmail"),
-            business_name=request.POST.get("nativeSelect"),
-            city=request.POST.get("city"),
-            village=request.POST.get("village"),
-            mandal=request.POST.get("mandal"),
-            zipcode=request.POST.get("zipcode"),
-            aadhaar=request.POST.get("aadhaar"),
+            business_name=request.POST.get("business_name"),
+            owner_name=request.POST.get("owner_name"),
+            email=request.POST.get("email"),
             phone=request.POST.get("phone"),
+            category=request.POST.get("category"),
             description=request.POST.get("description"),
+            profile_image=request.FILES.get("profile_image"),
+            aadhaar_pdf=request.FILES.get("aadhaar_pdf"),
         )
-        return render(request, "seller_success.html")
+        return redirect("seller_success")
 
-    return render(request, "seller_register.html")
+    return render(request, "seller/seller_register.html")
 
-from app.models import Seller
-def contractor_list(request):
-    sellers = Seller.objects.all()
-    Seller.objects.count()
-    return render(request, "contractor_list.html", {"sellers": sellers})
+# ======================
+# SUCCESS PAGE
+# ======================
+def seller_success(request):
+    return render(request, "seller/seller_success.html")
+
+
+# ======================
+# DASHBOARD
+# ======================
+def seller_dashboard(request):
+    sellers = Seller.objects.all().order_by("-created_at")
+    return render(request, "seller/seller_dashboard.html", {"sellers": sellers})
+
+# ======================================================
+# CONSTRUCTION SERVICES
+# ======================================================
+
+def house_cost_calculator(request):
+    return render(request, "construction_services/calculator.html")
+
+
+def generate_contract_no():
+    return f"OB-LAB-{now().year}-{uuid.uuid4().hex[:4].upper()}"
+
+
+def labour_contract_view(request):
+    if request.method == "POST":
+        contract = LabourContract.objects.create(
+            contract_no=generate_contract_no(),
+            contractor_name=request.POST.get("contractor_name"),
+            contractor_address=request.POST.get("contractor_address"),
+            worker_name=request.POST.get("worker_name"),
+            worker_id=request.POST.get("worker_id"),
+            worker_address=request.POST.get("worker_address"),
+            start_date=request.POST.get("start_date"),
+            end_date=request.POST.get("end_date"),
+            working_hours=request.POST.get("working_hours"),
+            wage_rate=request.POST.get("wage_rate"),
+            payment_mode=request.POST.get("payment_mode"),
+            is_locked=True
+        )
+        return redirect("labour_contract_pdf", contract_id=contract.id)
+
+    return render(request, "construction_services/labour_register.html")
+
+
+def labour_contract_pdf(request, contract_id):
+    contract = get_object_or_404(LabourContract, id=contract_id)
+    template = get_template("construction_services/labour_contract_pdf.html")
+    html = template.render({"contract": contract})
+
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="{contract.contract_no}.pdf"'
+    pisa.CreatePDF(html, dest=response)
+    return response
+
+
+def labour_offline_pdf(request):
+    template = get_template("construction_services/labour_offline_pdf.html")
+    html = template.render({})
+
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="labour_contract_template.pdf"'
+    pisa.CreatePDF(html, dest=response)
+    return response
+
+
+def labour_form_view(request):
+    return render(request, "construction_services/labour_form.html")
