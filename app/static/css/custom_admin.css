@@ -1,0 +1,33 @@
+/* Change top header */
+#header {
+    background: linear-gradient(90deg, #1f3c88, #2563eb);
+}
+
+/* Header title */
+#header h1 a {
+    color: #fff !important;
+    font-weight: 600;
+}
+
+/* Sidebar app headers */
+.module caption {
+    background: #1f3c88;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Buttons */
+.button, input[type=submit], .submit-row input {
+    background: #2563eb !important;
+    border-radius: 6px;
+}
+
+/* Hover */
+a:hover {
+    color: #2563eb;
+}
+
+/* Body font */
+body {
+    font-family: "Segoe UI", sans-serif;
+}
